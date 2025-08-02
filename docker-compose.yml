@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  db:
+    image: postgres:16
+    container_name: fastapi_inv_pg
+    restart: always
+    environment:
+      POSTGRES_DB: inventory
+      POSTGRES_USER: inventory_user
+      POSTGRES_PASSWORD: inventory_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - inventory_net
+  api:
+    build: .
+    container_name: fastapi_inv_api
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres+asyncpg://inventory_user:inventory_pass@db:5432/inventory
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app
+    networks:
+      - inventory_net
+networks:
+  inventory_net:
+    driver: bridge
