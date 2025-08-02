@@ -1,0 +1,8 @@
+-- Implement a table 'products' with:
+-- - id (PK, serial/int)
+-- - name (not null)
+-- - sku (not null, unique)
+-- - quantity (integer, not null, default 0)
+-- - price (numeric decimal (e.g. 10,2), not null)
+-- - created_at (timestamp, default now())
+-- Add at least one index for optimized queries
